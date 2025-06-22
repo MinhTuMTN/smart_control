@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: authentication-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_control
+    username: postgres
+    password: MinhTu
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: 1V0UqQy1iDfCX9iiR3PStGtyLPNy138O1V0UqQy1iDfCX9iiR3PStGtyLPNy138O
+
+server:
+  port: 7001

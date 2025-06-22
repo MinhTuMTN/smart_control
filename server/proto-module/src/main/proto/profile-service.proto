@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "google/type/date.proto";
+option java_multiple_files = true;
+option java_package = "com.smartcontrol.grpc";
+
+service ProfileServie {
+    rpc CreateProfile (CreateProfileRequest) returns (CreateProfileResponse) {}
+}
+
+message CreateProfileRequest {
+    string userId = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string email = 4;
+    google.type.Date dateOfBirth = 5;
+    string gender = 6;
+}
+
+message CreateProfileResponse {
+    string message = 2;
+}

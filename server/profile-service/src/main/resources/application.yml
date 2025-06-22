@@ -1,0 +1,40 @@
+spring:
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
+  application:
+    name: profile-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_control
+    username: postgres
+    password: MinhTu
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# Cấu hình Eureka với cổng gRPC
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      grpc-port: 9003
+
+jwt:
+  secret: 1V0UqQy1iDfCX9iiR3PStGtyLPNy138O1V0UqQy1iDfCX9iiR3PStGtyLPNy138O
+
+server:
+  port: 7003
+
+
+
+grpc:
+  server:
+    port: 9003
+  

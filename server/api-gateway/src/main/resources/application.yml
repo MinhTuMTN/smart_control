@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+        server:
+          webflux:
+            discovery:
+              locator:
+                enabled: true
+            routes:
+                - id: authentication
+                  uri: lb://authentication-service
+                  predicates:
+                  - Path=/auth/**
+                - id: profile
+                  uri: lb://profile-service
+                  predicates:
+                  - Path=/profile/**
+                - id: profile-grpc
+                  uri: grpc://profile-grpc-service:9002 
+                  predicates:
+                  # Sử dụng một path riêng biệt cho gRPC
+                  # Thay bằng package và service name trong file .proto của bạn
+                  - Path=/com.smartcontrol.grpc.ProfileServie/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+server:
+  port: 8080
+  http2:
+    enabled: true
+
+jwt:
+  secret: 1V0UqQy1iDfCX9iiR3PStGtyLPNy138O1V0UqQy1iDfCX9iiR3PStGtyLPNy138O
