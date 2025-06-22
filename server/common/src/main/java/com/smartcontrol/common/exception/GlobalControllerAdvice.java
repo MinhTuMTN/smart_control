@@ -3,6 +3,7 @@ package com.smartcontrol.common.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,11 +21,12 @@ public class GlobalControllerAdvice {
      * @return a GeneralResponse containing the error response
      */
     @ExceptionHandler(SmartControlException.class)
-    public GeneralResponse handleSmartControlException(SmartControlException ex) {
-        return GeneralResponse.builder()
-                .message(ex.getMessage())
-                .responseCode(ex.getErrorCode())
-                .build();
+    public ResponseEntity<GeneralResponse> handleSmartControlException(SmartControlException ex) {
+        return ResponseEntity.badRequest()
+                .body(GeneralResponse.builder()
+                        .message(ex.getMessage())
+                        .responseCode(ex.getErrorCode())
+                        .build());
     }
 
     /**
@@ -35,7 +37,7 @@ public class GlobalControllerAdvice {
      * @return a GeneralResponse containing the validation error response
      */
     @ExceptionHandler
-    public GeneralResponse handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<GeneralResponse> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getAllErrors().stream().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -43,11 +45,13 @@ public class GlobalControllerAdvice {
             errors.put(fieldName, errorMessage);
         });
 
-        return GeneralResponse.builder()
-                .message("Invalid input data")
-                .responseCode("INVALID_INPUT")
-                .errors(errors)
-                .build();
+        return ResponseEntity
+                .badRequest()
+                .body(GeneralResponse.builder()
+                        .message("Validation failed")
+                        .responseCode("VALIDATION_ERROR")
+                        .data(errors)
+                        .build());
     }
 
     /**
@@ -57,10 +61,12 @@ public class GlobalControllerAdvice {
      * @return a GeneralResponse containing the generic error response
      */
     @ExceptionHandler(Exception.class)
-    public GeneralResponse handleException(Exception ex) {
-        return GeneralResponse.builder()
-                .responseCode("INTERNAL_SERVER_ERROR")
-                .message("Internal Server Error")
-                .build();
+    public ResponseEntity<GeneralResponse> handleException(Exception ex) {
+        return ResponseEntity
+                .status(500)
+                .body(GeneralResponse.builder()
+                        .message("An unexpected error occurred")
+                        .responseCode("INTERNAL_SERVER_ERROR")
+                        .build());
     }
 }

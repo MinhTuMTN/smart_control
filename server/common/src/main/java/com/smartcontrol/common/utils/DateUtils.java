@@ -29,4 +29,17 @@ public class DateUtils {
         calendar.setTime(date);
         return calendar;
     }
+
+    public static java.util.Date convertToJavaDate(Date googleDate) {
+        if (googleDate == null) {
+            return null;
+        }
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, googleDate.getYear());
+        calendar.set(Calendar.MONTH, googleDate.getMonth() - 1); // Month is 0-based in Calendar
+        calendar.set(Calendar.DAY_OF_MONTH, googleDate.getDay());
+        
+        return calendar.getTime();
+    }
 }
